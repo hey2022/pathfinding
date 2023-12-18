@@ -56,7 +56,7 @@ class Graph:
             return
         if node in self.walls:
             self.walls.remove(node)
-        if self.target != None:
+        if self.target is not None:
             self.clear_node(surface, self.target)
         self.target = self.draw_node(surface, 0xFF0000, node)
 
@@ -65,7 +65,7 @@ class Graph:
             return
         if node in self.walls:
             self.walls.remove(node)
-        if self.source != None:
+        if self.source is not None:
             self.clear_node(surface, self.source)
         self.source = self.draw_node(surface, 0x99FFCC, node)
 
@@ -119,8 +119,6 @@ def dfs(graph: Graph, surface, visited, x: int, y: int):
     return 0
 
 
-
-
 def quit():
     pygame.quit()
     sys.exit()
@@ -152,8 +150,8 @@ def event_handler(graph: Graph, surface: pygame.Surface, event: pygame.event.Eve
         graph.clear_board(surface)
 
     if key_press(event, pygame.K_RETURN):
-        if graph.source != None and graph.target != None:
-            dfs(graph, surface, [], graph.source.left, graph.source.top)
+        if graph.source is not None and graph.target is not None:
+            dfs(graph, surface, [graph.source], graph.source.left, graph.source.top)
 
 
 def left_mouse_drag() -> bool:
