@@ -1,5 +1,6 @@
 import pygame
 import sys
+import time
 
 
 class Graph:
@@ -76,18 +77,48 @@ class Graph:
         surface.fill(BACKGROUND_COLOR)
         for x in range(0, self.width, self.block_size):
             for y in range(0, self.height, self.block_size):
-                print(x, y)
                 node = self.create_node(x, y)
                 pygame.draw.rect(surface, FOREGROUND_COLOR, node, 1)
                 nodes.append(node)
         pygame.display.update(nodes)
 
+    def in_bounds(self, x: int, y: int) -> bool:
+        return x >= 0 and x < self.width and y >= 0 and y < self.height
 
-def dfs(x: int, y: int) -> int:
-    directions = [[-1, 0], [1, 0], [-1, 0], [1, 0]]
+
+# visited = []
+
+
+def dfs(graph: Graph, surface, visited, x: int, y: int):
+    directions = [
+        [0, -1],
+        [0, 1],
+        [1, 0],
+        [-1, 0],
+    ]
+    print(x, y)
     for direction in directions:
-        dfs(x + direction[0], y + direction[1])
-    pass
+        time.sleep(0.01)
+        new_x = x + direction[0] * graph.block_size
+        new_y = y + direction[1] * graph.block_size
+        node = graph.create_node(new_x, new_y)
+        if node == graph.target:
+            print("found target")
+            return 1
+        if (
+            node not in graph.walls
+            and graph.in_bounds(new_x, new_y)
+            and node not in visited
+        ):
+            visited.append(node)
+            graph.draw_node(surface, 0x283457, node)
+            if dfs(graph, surface, visited, new_x, new_y):
+                graph.clear_node(surface, node)
+                return 1
+            graph.clear_node(surface, node)
+    return 0
+
+
 
 
 def quit():
@@ -119,6 +150,10 @@ def event_handler(graph: Graph, surface: pygame.Surface, event: pygame.event.Eve
 
     if key_press(event, pygame.K_c):
         graph.clear_board(surface)
+
+    if key_press(event, pygame.K_RETURN):
+        if graph.source != None and graph.target != None:
+            dfs(graph, surface, [], graph.source.left, graph.source.top)
 
 
 def left_mouse_drag() -> bool:
