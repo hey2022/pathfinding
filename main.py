@@ -19,10 +19,10 @@ class Graph:
     def draw_node(
         self, surface: pygame.Surface, color: int, node: pygame.Rect
     ) -> pygame.Rect:
-        if node == self.start:
-            self.start = None
-        if node == self.end:
-            self.end = None
+        if node == self.source:
+            self.source = None
+        if node == self.target:
+            self.target = None
         pygame.draw.rect(
             surface,
             color,
@@ -36,10 +36,10 @@ class Graph:
             self.walls.append(wall)
 
     def clear_node(self, surface: pygame.Surface, node: pygame.Rect):
-        if node == self.start:
-            self.start = None
-        if node == self.end:
-            self.end = None
+        if node == self.source:
+            self.source = None
+        if node == self.target:
+            self.target = None
         if node in self.walls:
             self.walls.remove(node)
         pygame.draw.rect(
@@ -50,27 +50,27 @@ class Graph:
         pygame.draw.rect(surface, FOREGROUND_COLOR, node, 1)
         pygame.display.update(node)
 
-    def update_goal(self, surface: pygame.Surface, node: pygame.Rect):
-        if self.end == node:
+    def update_target(self, surface: pygame.Surface, node: pygame.Rect):
+        if self.target == node:
             return
         if node in self.walls:
             self.walls.remove(node)
-        if self.end != None:
-            self.clear_node(surface, self.end)
-        self.end = self.draw_node(surface, 0xFF0000, node)
+        if self.target != None:
+            self.clear_node(surface, self.target)
+        self.target = self.draw_node(surface, 0xFF0000, node)
 
-    def update_start(self, surface: pygame.Surface, node: pygame.Rect):
-        if self.start == node:
+    def update_source(self, surface: pygame.Surface, node: pygame.Rect):
+        if self.source == node:
             return
         if node in self.walls:
             self.walls.remove(node)
-        if self.start != None:
-            self.clear_node(surface, self.start)
-        self.start = self.draw_node(surface, 0x99FFCC, node)
+        if self.source != None:
+            self.clear_node(surface, self.source)
+        self.source = self.draw_node(surface, 0x99FFCC, node)
 
     def clear_board(self, surface):
-        self.start = None
-        self.end = None
+        self.source = None
+        self.target = None
         self.walls = []
         nodes = []
         surface.fill(BACKGROUND_COLOR)
@@ -107,15 +107,15 @@ def event_handler(graph: Graph, surface: pygame.Surface, event: pygame.event.Eve
     ):
         quit()
 
-    if key_press(event, pygame.K_g):
-        x, y = pygame.mouse.get_pos()
-        node = graph.create_node(x, y)
-        graph.update_goal(surface, node)
-
     if key_press(event, pygame.K_s):
         x, y = pygame.mouse.get_pos()
         node = graph.create_node(x, y)
-        graph.update_start(surface, node)
+        graph.update_source(surface, node)
+
+    if key_press(event, pygame.K_t):
+        x, y = pygame.mouse.get_pos()
+        node = graph.create_node(x, y)
+        graph.update_target(surface, node)
 
     if key_press(event, pygame.K_c):
         graph.clear_board(surface)
