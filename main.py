@@ -3,10 +3,11 @@ import sys
 
 
 class Graph:
-    def __init__(self, width: int, height: int, block_size: int):
+    def __init__(self, width: int, height: int, block_size: int, grid_thickness: int):
         self.width = width * block_size
         self.height = height * block_size
         self.block_size = block_size
+        self.grid_thickness = grid_thickness
 
     def create_node(self, x: int, y: int) -> pygame.Rect:
         return pygame.Rect(
@@ -47,7 +48,7 @@ class Graph:
             BACKGROUND_COLOR,
             node,
         )
-        pygame.draw.rect(surface, FOREGROUND_COLOR, node, 1)
+        pygame.draw.rect(surface, FOREGROUND_COLOR, node, self.grid_thickness)
         pygame.display.update(node)
 
     def update_target(self, surface: pygame.Surface, node: pygame.Rect):
@@ -68,18 +69,17 @@ class Graph:
             self.clear_node(surface, self.source)
         self.source = self.draw_node(surface, 0x99FFCC, node)
 
-    def clear_board(self, surface):
+    def clear_board(self, surface: pygame.Surface):
         self.source = None
         self.target = None
         self.walls = []
-        nodes = []
         surface.fill(BACKGROUND_COLOR)
+        pygame.display.update()
         for x in range(0, self.width, self.block_size):
             for y in range(0, self.height, self.block_size):
                 node = self.create_node(x, y)
-                pygame.draw.rect(surface, FOREGROUND_COLOR, node, 1)
-                nodes.append(node)
-        pygame.display.update(nodes)
+                pygame.draw.rect(surface, FOREGROUND_COLOR, node, self.grid_thickness)
+        pygame.display.update()
 
 
 # visited = []
@@ -181,7 +181,7 @@ def right_mouse_drag() -> bool:
 def main():
     pygame.init()
     clock = pygame.time.Clock()
-    graph = Graph(20, 20, 50)
+    graph = Graph(1000, 1000, 1, -1)
     surface = pygame.display.set_mode((graph.width, graph.height))
 
     graph.clear_board(surface)
