@@ -106,14 +106,12 @@ def dfs(
         [1, 0],
         [-1, 0],
     ]
-    print(x, y)
     clock.tick(60)
     for direction in directions:
         new_x = x + direction[0] * graph.block_size
         new_y = y + direction[1] * graph.block_size
         node = graph.create_node(new_x, new_y)
         if node == graph.target:
-            print("found target")
             return 1
         if is_valid_node(graph, node) and node not in visited:
             visited.append(node)
