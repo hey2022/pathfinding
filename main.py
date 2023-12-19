@@ -81,11 +81,15 @@ class Graph:
                 nodes.append(node)
         pygame.display.update(nodes)
 
-    def in_bounds(self, x: int, y: int) -> bool:
-        return x >= 0 and x < self.width and y >= 0 and y < self.height
-
 
 # visited = []
+
+
+def is_valid_node(graph: Graph, node: pygame.Rect):
+    x, y = node.left, node.top
+    in_bounds = x >= 0 and x < graph.width and y >= 0 and y < graph.height
+    not_wall = node not in graph.walls
+    return in_bounds and not_wall
 
 
 def dfs(
@@ -111,11 +115,7 @@ def dfs(
         if node == graph.target:
             print("found target")
             return 1
-        if (
-            node not in graph.walls
-            and graph.in_bounds(new_x, new_y)
-            and node not in visited
-        ):
+        if is_valid_node(graph, node) and node not in visited:
             visited.append(node)
             graph.draw_node(surface, 0x99FFCC, node)
             if dfs(graph, surface, clock, visited, new_x, new_y):
