@@ -205,4 +205,5 @@ def main():
 if __name__ == "__main__":
     FOREGROUND_COLOR = 0xC0CAF5
     BACKGROUND_COLOR = 0x1A1B26
+    sys.setrecursionlimit(1000000)
     main()
