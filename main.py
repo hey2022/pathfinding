@@ -168,7 +168,7 @@ def right_mouse_drag() -> bool:
 def main():
     pygame.init()
     clock = pygame.time.Clock()
-    graph = Graph(1000, 1000, 1, -1)
+    graph = Graph(50, 50, 20, 1)
     surface = graph.surface
     graph.clear_board()
     while True:
