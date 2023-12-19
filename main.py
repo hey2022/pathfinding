@@ -117,7 +117,7 @@ def dfs(
             and node not in visited
         ):
             visited.append(node)
-            graph.draw_node(surface, 0x283457, node)
+            graph.draw_node(surface, 0x99FFCC, node)
             if dfs(graph, surface, clock, visited, new_x, new_y):
                 graph.clear_node(surface, node)
                 return 1
