@@ -37,6 +37,10 @@ class Graph:
         if wall not in self.walls:
             self.walls.append(wall)
 
+    def add_visited(self, visited: pygame.Rect):
+        if visited not in self.visited:
+            self.visited.append(visited)
+
     def clear_node(self, node: pygame.Rect):
         if node == self.source:
             self.source = None
@@ -74,7 +78,9 @@ class Graph:
         self.source = None
         self.target = None
         self.walls = []
+        self.visited = []
         self.surface.fill(BACKGROUND_COLOR)
+        nodes = []
         pygame.display.update()
         for x in range(0, self.width, self.block_size):
             for y in range(0, self.height, self.block_size):
@@ -82,43 +88,28 @@ class Graph:
                 pygame.draw.rect(self.surface, FOREGROUND_COLOR, node, self.grid_thickness)
         pygame.display.update()
 
+    def is_valid_node(self, node: pygame.Rect):
+        x, y = node.left, node.top
+        in_bounds = x >= 0 and x < self.width and y >= 0 and y < self.height
+        not_wall = node not in self.walls
+        return in_bounds and not_wall
 
-def is_valid_node(graph: Graph, node: pygame.Rect):
-    x, y = node.left, node.top
-    in_bounds = x >= 0 and x < graph.width and y >= 0 and y < graph.height
-    not_wall = node not in graph.walls
-    return in_bounds and not_wall
-
-
-def dfs(
-    graph: Graph,
-    surface: pygame.Surface,
-    clock: pygame.time.Clock,
-    visited: list[pygame.Rect],
-    x: int,
-    y: int,
-):
-    directions = [
-        [0, -1],
-        [0, 1],
-        [1, 0],
-        [-1, 0],
-    ]
-    clock.tick(60)
-    for direction in directions:
-        new_x = x + direction[0] * graph.block_size
-        new_y = y + direction[1] * graph.block_size
-        node = graph.create_node(new_x, new_y)
-        if node == graph.target:
-            return 1
-        if is_valid_node(graph, node) and node not in visited:
-            visited.append(node)
-            graph.draw_node(surface, 0x99FFCC, node)
-            if dfs(graph, surface, clock, visited, new_x, new_y):
-                graph.clear_node(surface, node)
+    def dfs(self, clock: pygame.time.Clock, x: int, y: int):
+        clock.tick(60)
+        for direction in DIRECTIONS:
+            new_x = x + direction[0] * self.block_size
+            new_y = y + direction[1] * self.block_size
+            node = self.create_node(new_x, new_y)
+            if node == self.target:
                 return 1
-            graph.clear_node(surface, node)
-    return 0
+            if self.is_valid_node(node) and node not in self.visited:
+                self.visited.append(node)
+                self.draw_node(0x99FFCC, node)
+                if self.dfs(clock, new_x, new_y):
+                    self.clear_node(node)
+                    return 1
+                self.clear_node(node)
+        return 0
 
 
 def quit():
@@ -158,11 +149,9 @@ def event_handler(
 
     if key_press(event, pygame.K_RETURN):
         if graph.source is not None and graph.target is not None:
-            dfs(
-                graph,
-                surface,
+            graph.visited = [graph.source]
+            graph.dfs(
                 clock,
-                [graph.source],
                 graph.source.left,
                 graph.source.top,
             )
@@ -203,4 +192,10 @@ if __name__ == "__main__":
     FOREGROUND_COLOR = 0xC0CAF5
     BACKGROUND_COLOR = 0x1A1B26
     sys.setrecursionlimit(1000000)
+    DIRECTIONS = [
+        [0, -1],
+        [0, 1],
+        [1, 0],
+        [-1, 0],
+    ]
     main()
