@@ -145,7 +145,7 @@ def event_handler(
         graph.update_target(node)
 
     if key_press(event, pygame.K_c):
-        graph.clear_board(surface)
+        graph.clear_board()
 
     if key_press(event, pygame.K_RETURN):
         if graph.source is not None and graph.target is not None:
