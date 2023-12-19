@@ -185,6 +185,7 @@ def main():
 
         for event in pygame.event.get():
             event_handler(graph, surface, clock, event)
+            pygame.event.get()
 
 
 if __name__ == "__main__":
