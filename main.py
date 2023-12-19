@@ -1,6 +1,5 @@
 import pygame
 import sys
-import time
 
 
 class Graph:
@@ -89,7 +88,14 @@ class Graph:
 # visited = []
 
 
-def dfs(graph: Graph, surface, visited, x: int, y: int):
+def dfs(
+    graph: Graph,
+    surface: pygame.Surface,
+    clock: pygame.time.Clock,
+    visited: list[pygame.Rect],
+    x: int,
+    y: int,
+):
     directions = [
         [0, -1],
         [0, 1],
@@ -97,8 +103,8 @@ def dfs(graph: Graph, surface, visited, x: int, y: int):
         [-1, 0],
     ]
     print(x, y)
+    clock.tick(60)
     for direction in directions:
-        time.sleep(0.01)
         new_x = x + direction[0] * graph.block_size
         new_y = y + direction[1] * graph.block_size
         node = graph.create_node(new_x, new_y)
@@ -112,7 +118,7 @@ def dfs(graph: Graph, surface, visited, x: int, y: int):
         ):
             visited.append(node)
             graph.draw_node(surface, 0x283457, node)
-            if dfs(graph, surface, visited, new_x, new_y):
+            if dfs(graph, surface, clock, visited, new_x, new_y):
                 graph.clear_node(surface, node)
                 return 1
             graph.clear_node(surface, node)
@@ -128,7 +134,12 @@ def key_press(event: pygame.event.Event, key: int) -> bool:
     return event.type == pygame.KEYDOWN and event.key == key
 
 
-def event_handler(graph: Graph, surface: pygame.Surface, event: pygame.event.Event):
+def event_handler(
+    graph: Graph,
+    surface: pygame.Surface,
+    clock: pygame.time.Clock,
+    event: pygame.event.Event,
+):
     if (
         event.type == pygame.QUIT
         or event.type == pygame.KEYDOWN
@@ -151,7 +162,14 @@ def event_handler(graph: Graph, surface: pygame.Surface, event: pygame.event.Eve
 
     if key_press(event, pygame.K_RETURN):
         if graph.source is not None and graph.target is not None:
-            dfs(graph, surface, [graph.source], graph.source.left, graph.source.top)
+            dfs(
+                graph,
+                surface,
+                clock,
+                [graph.source],
+                graph.source.left,
+                graph.source.top,
+            )
 
 
 def left_mouse_drag() -> bool:
@@ -182,7 +200,7 @@ def main():
             graph.clear_node(surface, node)
 
         for event in pygame.event.get():
-            event_handler(graph, surface, event)
+            event_handler(graph, surface, clock, event)
         clock.tick(60)
 
 
