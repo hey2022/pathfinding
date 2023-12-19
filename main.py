@@ -18,9 +18,7 @@ class Graph:
             self.block_size,
         )
 
-    def draw_node(
-        self, color: int, node: pygame.Rect
-    ) -> pygame.Rect:
+    def draw_node(self, color: int, node: pygame.Rect) -> pygame.Rect:
         if node == self.source:
             self.source = None
         if node == self.target:
@@ -85,7 +83,9 @@ class Graph:
         for x in range(0, self.width, self.block_size):
             for y in range(0, self.height, self.block_size):
                 node = self.create_node(x, y)
-                pygame.draw.rect(self.surface, FOREGROUND_COLOR, node, self.grid_thickness)
+                pygame.draw.rect(
+                    self.surface, FOREGROUND_COLOR, node, self.grid_thickness
+                )
         pygame.display.update()
 
     def is_valid_node(self, node: pygame.Rect):
