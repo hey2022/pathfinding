@@ -43,7 +43,7 @@ class Graph:
         if self.matrix.source == (x, y):
             self.matrix.source = None
         if self.matrix.target == (x, y):
-            self.matrix.targer = None
+            self.matrix.target = None
         self.matrix.add_wall(self.pixel_to_index(pos))
         self.draw_node(FOREGROUND_COLOR, self.create_node(pos))
 
@@ -81,7 +81,7 @@ class Graph:
         if self.matrix.source == (x, y):
             self.matrix.source = None
         if self.matrix.target == (x, y):
-            self.matrix.targer = None
+            self.matrix.target = None
         self.matrix.walls[x][y] = False
         self.draw_node(BACKGROUND_COLOR, self.create_node(pos))
 
