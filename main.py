@@ -94,7 +94,7 @@ class Graph:
         return in_bounds and not_wall
 
     def dfs(self, clock: pygame.time.Clock, x: int, y: int):
-        clock.tick(60)
+        clock.tick(120)
         for direction in DIRECTIONS:
             new_x = x + direction[0] * self.block_size
             new_y = y + direction[1] * self.block_size
