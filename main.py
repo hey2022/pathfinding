@@ -47,6 +47,14 @@ class Graph:
         self.matrix.add_wall(self.pixel_to_index(pos))
         self.draw_node(FOREGROUND_COLOR, self.create_node(pos))
 
+    def draw_visited(self, index_pos):
+        pos = self.index_to_pixel(index_pos)
+        self.draw_node(0xA7ABC3, self.create_node(pos))
+
+    def draw_visiting(self, index_pos):
+        pos = self.index_to_pixel(index_pos)
+        self.draw_node(0x99FFCC, self.create_node(pos))
+
     def update_target(self, pos: (int, int)):
         (x, y) = self.pixel_to_index(pos)
         if self.matrix.target == (x, y):
@@ -65,6 +73,7 @@ class Graph:
         if self.matrix.source is not None:
             self.clear_node(self.index_to_pixel(self.matrix.source))
         self.matrix.source = (x, y)
+        self.matrix.events = [Event((x, y), EventType.VISIT)]
         self.draw_node(0x99FFCC, self.create_node(pos))
 
     def clear_node(self, pos: (int, int)):
@@ -88,9 +97,9 @@ class EventType(Enum):
 
 
 class Event:
-    def __init__(self, typ: EventType, pos: (int, int)):
-        self.typ = typ
+    def __init__(self, pos: (int, int), typ: EventType):
         self.pos = pos
+        self.typ = typ
 
 
 class Matrix:
@@ -115,6 +124,14 @@ class Matrix:
     def init_events(self):
         self.events = []
 
+    def avaliable(self, pos):
+        (x, y) = pos
+        if x < 0 or y < 0 or x > self.rows - 1 or y > self.cols - 1:
+            return False
+        if self.walls[x][y] or self.visited[x][y]:
+            return False
+        return True
+
     def add_wall(self, pos: (int, int)):
         (x, y) = pos
         if self.walls[x][y]:
@@ -123,14 +140,25 @@ class Matrix:
         return True
 
     def dfs(self, graph: Graph):
-        if self.events.empty():
-            return
-        event = self.events.top()
-        self.events.pop()
+        if len(self.events) == 0 or self.source is None:
+            return -1
+        event = self.events.pop()
+        if not self.avaliable(event.pos) and event.typ == EventType.VISIT:
+            return 0
         if event.typ == EventType.LEAVE:
-            pass
+            graph.draw_visited(event.pos)
         else:
-            pass
+            if event.pos == self.target:
+                self.init_events()
+                return -1
+            graph.draw_visiting(event.pos)
+            self.events.append(Event(event.pos, EventType.LEAVE))
+            (x, y) = event.pos
+            self.visited[x][y] = True
+            for (dx, dy) in DIRECTIONS:
+                newpos = (x + dx, y + dy)
+                self.events.append(Event(newpos, EventType.VISIT))
+        return 1
 
 
 def quit():
@@ -173,7 +201,12 @@ def event_handler(
         graph.clear_board()
 
     if key_press(event, pygame.K_RETURN):
-        pass
+        while True:
+            res = graph.matrix.dfs(graph)
+            if res == 1:
+                clock.tick(60)
+            if res == -1:
+                break
 
 
 def left_mouse_drag() -> bool:
