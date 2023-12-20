@@ -202,8 +202,8 @@ if __name__ == "__main__":
     sys.setrecursionlimit(1000000)
     DIRECTIONS = [
         [0, -1],
-        [0, 1],
         [1, 0],
+        [0, 1],
         [-1, 0],
     ]
     main()
