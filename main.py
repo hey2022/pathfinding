@@ -78,7 +78,6 @@ class Graph:
         self.walls = []
         self.visited = []
         self.surface.fill(BACKGROUND_COLOR)
-        nodes = []
         pygame.display.update()
         for x in range(0, self.width, self.block_size):
             for y in range(0, self.height, self.block_size):
