@@ -30,11 +30,7 @@ class Graph:
         )
 
     def draw_node(self, color: int, node: pygame.Rect) -> pygame.Rect:
-        pygame.draw.rect(
-            self.surface,
-            color,
-            node
-        )
+        pygame.draw.rect(self.surface, color, node)
         pygame.display.update(node)
         return node
 
@@ -155,7 +151,7 @@ class Matrix:
             self.events.append(Event(event.pos, EventType.LEAVE))
             (x, y) = event.pos
             self.visited[x][y] = True
-            for (dx, dy) in DIRECTIONS:
+            for dx, dy in DIRECTIONS:
                 newpos = (x + dx, y + dy)
                 self.events.append(Event(newpos, EventType.VISIT))
         return 1
