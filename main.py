@@ -12,15 +12,15 @@ class Graph:
         self.surface = pygame.display.set_mode((self.width, self.height))
         self.matrix = Matrix(cols, rows)
 
-    def pixel_to_index(self, pos: (int, int)):
+    def pixel_to_index(self, pos: tuple[int, int]):
         (x, y) = pos
         return (x // self.block_size, y // self.block_size)
 
-    def index_to_pixel(self, pos: (int, int)):
+    def index_to_pixel(self, pos: tuple[int, int]):
         (x, y) = pos
         return (x * self.block_size, y * self.block_size)
 
-    def create_node(self, pos: (int, int)) -> pygame.Rect:
+    def create_node(self, pos: tuple[int, int]) -> pygame.Rect:
         (x, y) = pos
         return pygame.Rect(
             x // self.block_size * self.block_size,
@@ -55,7 +55,7 @@ class Graph:
         pos = self.index_to_pixel(index_pos)
         self.draw_node(0x99FFCC, self.create_node(pos))
 
-    def update_target(self, pos: (int, int)):
+    def update_target(self, pos: tuple[int, int]):
         (x, y) = self.pixel_to_index(pos)
         if self.matrix.target == (x, y):
             return
@@ -65,7 +65,7 @@ class Graph:
         self.matrix.target = (x, y)
         self.draw_node(0xFF0000, self.create_node(pos))
 
-    def update_source(self, pos: (int, int)):
+    def update_source(self, pos: tuple[int, int]):
         (x, y) = self.pixel_to_index(pos)
         if self.matrix.source == (x, y):
             return
@@ -76,7 +76,7 @@ class Graph:
         self.matrix.events = [Event((x, y), EventType.VISIT)]
         self.draw_node(0x99FFCC, self.create_node(pos))
 
-    def clear_node(self, pos: (int, int)):
+    def clear_node(self, pos: tuple[int, int]):
         (x, y) = self.pixel_to_index(pos)
         if self.matrix.source == (x, y):
             self.matrix.source = None
@@ -97,7 +97,7 @@ class EventType(Enum):
 
 
 class Event:
-    def __init__(self, pos: (int, int), typ: EventType):
+    def __init__(self, pos: tuple[int, int], typ: EventType):
         self.pos = pos
         self.typ = typ
 
@@ -132,7 +132,7 @@ class Matrix:
             return False
         return True
 
-    def add_wall(self, pos: (int, int)):
+    def add_wall(self, pos: tuple[int, int]):
         (x, y) = pos
         if self.walls[x][y]:
             return False
