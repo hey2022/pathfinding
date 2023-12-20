@@ -41,5 +41,5 @@ Run `python main.py`
 - `t` to set the `target node`
 - `c` to clear the board
 - `tab` to cycle which pathfinding algorithm to use (WIP)
-- `return` to run the pathfinding algorithm
+- `enter` to run the pathfinding algorithm
 
