@@ -121,6 +121,12 @@ def key_press(event: pygame.event.Event, key: int) -> bool:
     return event.type == pygame.KEYDOWN and event.key == key
 
 
+def display_message(surface: pygame.Surface, message: str, x: int, y: int):
+    text = FONT.render(message, True, 0xFFFFFFFF)
+    rect = surface.blit(text, (x, y))
+    pygame.display.update(rect)
+
+
 def event_handler(
     graph: Graph,
     surface: pygame.Surface,
@@ -166,7 +172,6 @@ def right_mouse_drag() -> bool:
 
 
 def main():
-    pygame.init()
     clock = pygame.time.Clock()
     graph = Graph(50, 50, 20, 1)
     surface = graph.surface
@@ -189,8 +194,12 @@ def main():
 
 
 if __name__ == "__main__":
+    pygame.init()
+    pygame.font.init()
+
     FOREGROUND_COLOR = 0xC0CAF5
     BACKGROUND_COLOR = 0x1A1B26
+    FONT = pygame.font.Font(None, 50)
     sys.setrecursionlimit(1000000)
     DIRECTIONS = [
         [0, -1],
