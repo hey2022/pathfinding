@@ -4,18 +4,36 @@ This program will allow users to interactively visualise many different pathfind
 
 # Setup
 
-Run the following commands
+## Clone
+
+
+``` sh
+git clone https://github.com/hey2022/pathfinding.git
+```
+
+## Virtual Environment Setup
+
+### Windows
+
+``` powershell
+cd pathfinding
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### Linux
 
 ```sh
-git clone https://github.com/hey2022/pathfinding.git
 cd pathfinding
 python -m venv venv
 source ./venv/bin/activate
 pip install -r requirements.txt
-python main.py
 ```
 
 # Usage
+
+Run `python main.py`
 
 - `LMB` to create a `wall node`
 - `RMB` to clear a `node`
