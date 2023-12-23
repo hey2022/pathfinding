@@ -1,40 +1,34 @@
-# Pathfinding Demonstration
+# Pathfinding
+
+## About
 
 This program will allow users to interactively visualise many different pathfinding algorithms.
 
-# Setup
-
-## Clone
-
-
-``` sh
-git clone https://github.com/hey2022/pathfinding.git
-```
-
-## Virtual Environment Setup
+## Getting Started
 
 ### Windows
 
-``` powershell
-cd pathfinding
-python -m venv venv
-.\venv\Scripts\activate
-pip install -r requirements.txt
-```
+1. Clone the repository `git clone https://github.com/hey2022/pathfinding.git`
+2. Enter the directory `cd pathfinding`
+3. Setup the virtual environment `python -m venv venv`
+4. Activate virtual environment `.\venv\Scripts\activate`
+5. Install dependencies `pip install -r requirements.txt`
 
 ### Linux
 
-```sh
-cd pathfinding
-python -m venv venv
-source ./venv/bin/activate
-pip install -r requirements.txt
-```
+1. Clone the repository `git clone https://github.com/hey2022/pathfinding.git`
+2. Enter the directory `cd pathfinding`
+3. Setup the virtual environment `python -m venv venv`
+4. Activate virtual environment `source ./venv/bin/activate`
+5. Install dependencies `pip install -r requirements.txt`
 
-# Usage
+## Usage
 
-Run `python main.py`
+### Run
+1. Activate the virtual environment
+2. Run `python main.py` 
 
+### Keybinds
 - `LMB` to create a `wall node`
 - `RMB` to clear a `node`
 - `s` to set the `source node`
