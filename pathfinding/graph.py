@@ -20,7 +20,7 @@ class Graph:
     def setup(self):
         self.source = None
         self.target = None
-        self.walls = [[False for _ in range(self.columns)] for _ in range(self.rows)]
+        self.walls = set()
 
     def pos_to_index(self, pos: tuple[int, int]) -> tuple[int, int]:
         (column, row) = map(lambda x: x // self.block_size, pos)
@@ -30,7 +30,7 @@ class Graph:
         (y, x) = map(lambda x: x * self.block_size, index)
         return (x, y)
 
-    def create_node(self, index: tuple[int, int]) -> pygame.Rect:
+    def create_rect(self, index: tuple[int, int]) -> pygame.Rect:
         (x, y) = self.index_to_pos(index)
         return pygame.Rect(
             x,
@@ -39,24 +39,23 @@ class Graph:
             self.block_size,
         )
 
-    def draw_index(self, color: int, index: tuple[int, int]) -> pygame.Rect:
-        node = self.create_node(index)
-        pygame.draw.rect(self.surface, color, node)
-        pygame.display.update(node)
-        return node
+    def draw_node(self, color: int, node: tuple[int, int]) -> pygame.Rect:
+        rect = self.create_rect(node)
+        pygame.draw.rect(self.surface, color, rect)
+        pygame.display.update(rect)
+        return rect
 
-    def clear_index(self, index: tuple[int, int]):
-        (row, column) = index
-        if self.source == index:
+    def clear_node(self, node: tuple[int, int]):
+        if self.source == node:
             self.source = None
-        if self.target == index:
+        if self.target == node:
             self.target = None
-        self.walls[row][column] = False
-        self.draw_index(self.background_color, index)
+        self.walls.discard(node)
+        self.draw_node(self.background_color, node)
 
     def clear_pos(self, pos: tuple[int, int]):
-        index = self.pos_to_index(pos)
-        self.clear_index(index)
+        node = self.pos_to_index(pos)
+        self.clear_node(node)
 
     def clear_board(self):
         self.setup()
@@ -64,29 +63,26 @@ class Graph:
         pygame.display.update()
 
     def add_wall(self, pos):
-        index = self.pos_to_index(pos)
-        (row, column) = index
-        if self.source == index:
+        node = self.pos_to_index(pos)
+        if self.source == node:
             self.source = None
-        if self.target == index:
+        if self.target == node:
             self.target = None
-        self.walls[row][column] = True
-        self.draw_index(self.foreground_color, index)
+        self.walls.add(node)
+        self.draw_node(self.foreground_color, node)
 
     def update_target(self, pos: tuple[int, int]):
-        index = self.pos_to_index(pos)
-        (row, column) = index
-        self.walls[row][column] = False
+        node = self.pos_to_index(pos)
+        self.walls.discard(node)
         if self.target is not None:
-            self.clear_index(self.target)
-        self.target = index
-        self.draw_index(0xFF0000, index)
+            self.clear_node(self.target)
+        self.target = node
+        self.draw_node(0xFF0000, node)
 
     def update_source(self, pos: tuple[int, int]):
-        index = self.pos_to_index(pos)
-        (row, column) = index
-        self.walls[row][column] = False
+        node = self.pos_to_index(pos)
+        self.walls.discard(node)
         if self.source is not None:
-            self.clear_index(self.source)
-        self.source = index
-        self.draw_index(0x99FFCC, index)
+            self.clear_node(self.source)
+        self.source = node
+        self.draw_node(0x99FFCC, node)
