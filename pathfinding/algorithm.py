@@ -1,35 +1,104 @@
+from typing import List, Set, Tuple, Dict
 from pathfinding.graph import *
+from collections import deque
+
 
 # from enum import Enum, auto
 
 DIRECTIONS = [
-    [0, -1],
-    [1, 0],
-    [0, 1],
-    [-1, 0],
+    (0, -1),
+    (1, 0),
+    (0, 1),
+    (-1, 0),
 ]
 
 
-def dfs(graph: Graph):
-    if len(self.events) == 0 or self.source is None:
-        return -1
-    event = self.events.pop()
-    if not self.avaliable(event.pos) and event.typ == EventType.VISIT:
-        return 0
-    if event.typ == EventType.LEAVE:
-        graph.draw_visited(event.pos)
-    else:
-        if event.pos == self.target:
-            self.init_events()
-            return -1
-        graph.draw_visiting(event.pos)
-        self.events.append(Event(event.pos, EventType.LEAVE))
-        (x, y) = event.pos
-        self.visited[y][x] = True
-        for dx, dy in DIRECTIONS:
-            newpos = (x + dx, y + dy)
-            self.events.append(Event(newpos, EventType.VISIT))
-    return 1
+def neighbours(node: Tuple[int, int]) -> List[Tuple[int, int]]:
+    next_nodes = [
+        (node[0] + direction[0], node[1] + direction[1]) for direction in DIRECTIONS
+    ]
+    return next_nodes
+
+
+def valid_node(
+    graph: Graph, node: tuple[int, int], explored: Set[Tuple[int, int]]
+) -> bool:
+    (row, column) = node
+    if row < 0 or row >= graph.rows or column < 0 or column >= graph.columns:
+        return False
+    if node in graph.walls or node in explored:
+        return False
+    return True
+
+
+def reconstruct_path(
+    node: Tuple[int, int], came_from: Dict[Tuple[int, int], Tuple[int, int]]
+) -> List[Tuple[int, int]]:
+    total_path = [node]
+    while node in came_from:
+        node = came_from[node]
+        total_path.insert(0, node)
+    return total_path
+
+
+def bfs(graph: Graph) -> List[Tuple[int, int]]:
+    queue = deque()
+    explored = set()
+    came_from = {}
+    explored.add(graph.source)
+    queue.append(graph.source)
+    while queue:
+        node = queue.popleft()
+        if node == graph.target:
+            return reconstruct_path(node, came_from)
+        for neighbour in neighbours(node):
+            if valid_node(graph, neighbour, explored):
+                graph.draw_node(0x99FFCC, neighbour)
+                explored.add(node)
+                came_from[neighbour] = node
+                queue.append(neighbour)
+
+    # heapq.heappush(open_set, ((0, 0), start))
+    # came_from = {}
+    # g_score = {start: 0}
+    # f_score = {start: self.h_cost(start, goal)}
+    #     while len(open_set) > 0:
+    #         current = heapq.heappop(open_set)[1]
+    #         if current == goal:
+    #             return self.reconstruct_path(came_from, current)
+    #         neighbors = [(current[0], current[1] - game.block), (current[0] + game.block, current[1]),
+    #                      (current[0], current[1] + game.block), (current[0] - game.block, current[1])]
+    #         for neighbor in neighbors:
+    #             if self.valid(neighbor):
+    #                 new_g = g_score.get(current) + game.block
+    #                 if new_g < g_score.get(neighbor, math.inf):
+    #                     came_from[neighbor] = current
+    #                     g_score[neighbor] = new_g
+    #                     f_score[neighbor] = new_g + self.h_cost(neighbor, goal)
+    #                     if ((f_score[neighbor], self.h_cost(neighbor, goal)), neighbor) not in open_set:
+    #                         heapq.heappush(open_set, ((f_score[neighbor], self.h_cost(neighbor, goal)), neighbor))
+
+
+# def dfs(graph: Graph):
+#     if len(graph.events) == 0 or graph.source is None:
+#         return -1
+#     event = graph.events.pop()
+#     if not graph.avaliable(event.pos) and event.typ == EventType.VISIT:
+#         return 0
+#     if event.typ == EventType.LEAVE:
+#         graph.draw_visited(event.pos)
+#     else:
+#         if event.pos == graph.target:
+#             graph.init_events()
+#             return -1
+#         graph.draw_visiting(event.pos)
+#         graph.events.append(Event(event.pos, EventType.LEAVE))
+#         (x, y) = event.pos
+#         graph.visited[y][x] = True
+#         for dx, dy in DIRECTIONS:
+#             newpos = (x + dx, y + dy)
+#             graph.events.append(Event(newpos, EventType.VISIT))
+#     return 1
 
 
 # class EventType(Enum):
@@ -64,21 +133,6 @@ def dfs(graph: Graph):
 
 #     def init_events(self):
 #         self.events = []
-
-#     def avaliable(self, pos):
-#         (x, y) = pos
-#         if x < 0 or y < 0 or x > self.rows - 1 or y > self.columns - 1:
-#             return False
-#         if self.walls[y][x] or self.visited[y][x]:
-#             return False
-#         return True
-
-#     def add_wall(self, pos: tuple[int, int]):
-#         (x, y) = pos
-#         if self.walls[y][x]:
-#             return False
-#         self.walls[y][x] = True
-#         return True
 
 # def draw_visited(self, index_pos):
 #     pos = self.index_to_pixel(index_pos)

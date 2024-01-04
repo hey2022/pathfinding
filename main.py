@@ -1,8 +1,7 @@
 import pygame
 import sys
 from pathfinding.graph import *
-
-# from graph.pathfinding import *
+from pathfinding.algorithm import *
 
 
 def quit():
@@ -30,7 +29,7 @@ def right_mouse_drag() -> bool:
 
 def main():
     clock = pygame.time.Clock()
-    surface = pygame.display.set_mode((1000, 500))
+    surface = pygame.display.set_mode((1000, 1000))
     graph = Graph(10, -1, FOREGROUND_COLOR, BACKGROUND_COLOR)
     graph.clear_board()
     while True:
@@ -57,6 +56,11 @@ def main():
             if key_press(event, pygame.K_c):
                 graph.clear_board()
 
+            if key_press(event, pygame.K_RETURN):
+                if graph.source is not None and graph.target is not None:
+                    path = bfs(graph)
+                    for node in path:
+                        graph.draw_node(0x99FFCC, node)
             pygame.event.get()
 
 
