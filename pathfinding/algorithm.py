@@ -54,7 +54,7 @@ def bfs(graph: Graph) -> List[Tuple[int, int]]:
         for neighbour in neighbours(node):
             if valid_node(graph, neighbour, explored):
                 graph.draw_node(0x99FFCC, neighbour)
-                explored.add(node)
+                explored.add(neighbour)
                 came_from[neighbour] = node
                 queue.append(neighbour)
 
