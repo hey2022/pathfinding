@@ -1,4 +1,3 @@
-from typing import List, Set, Tuple, Dict
 from pathfinding.graph import *
 from collections import deque
 
@@ -13,7 +12,7 @@ DIRECTIONS = [
 ]
 
 
-def neighbours(node: Tuple[int, int]) -> List[Tuple[int, int]]:
+def get_neighbours(node: tuple[int, int]) -> list[tuple[int, int]]:
     next_nodes = [
         (node[0] + direction[0], node[1] + direction[1]) for direction in DIRECTIONS
     ]
@@ -21,7 +20,7 @@ def neighbours(node: Tuple[int, int]) -> List[Tuple[int, int]]:
 
 
 def valid_node(
-    graph: Graph, node: tuple[int, int], explored: Set[Tuple[int, int]]
+    graph: Graph, node: tuple[int, int], explored: set[tuple[int, int]]
 ) -> bool:
     (row, column) = node
     if row < 0 or row >= graph.rows or column < 0 or column >= graph.columns:
@@ -32,8 +31,8 @@ def valid_node(
 
 
 def reconstruct_path(
-    node: Tuple[int, int], came_from: Dict[Tuple[int, int], Tuple[int, int]]
-) -> List[Tuple[int, int]]:
+    node: tuple[int, int], came_from: dict[tuple[int, int], tuple[int, int]]
+) -> list[tuple[int, int]]:
     total_path = [node]
     while node in came_from:
         node = came_from[node]
