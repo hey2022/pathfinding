@@ -60,7 +60,7 @@ def main():
                 if graph.source is not None and graph.target is not None:
                     path = bfs(graph)
                     for node in path:
-                        graph.draw_node(0x99FFCC, node)
+                        graph.draw_node(node, 0x0000FF)
             pygame.event.get()
 
 

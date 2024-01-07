@@ -52,7 +52,7 @@ def bfs(graph: Graph) -> List[Tuple[int, int]]:
             return reconstruct_path(node, came_from)
         for neighbour in neighbours(node):
             if valid_node(graph, neighbour, explored):
-                graph.draw_node(0x99FFCC, neighbour)
+                graph.draw_node(neighbour, 0x565656)
                 explored.add(neighbour)
                 came_from[neighbour] = node
                 queue.append(neighbour)

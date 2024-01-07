@@ -39,23 +39,31 @@ class Graph:
             self.block_size,
         )
 
-    def draw_node(self, color: int, node: tuple[int, int]) -> pygame.Rect:
+    def draw_node(self, node: tuple[int, int], color: int) -> pygame.Rect:
         rect = self.create_rect(node)
         pygame.draw.rect(self.surface, color, rect)
-        pygame.display.update(rect)
         return rect
 
-    def clear_node(self, node: tuple[int, int]):
+    def display_nodes(self, node_list):
+        node_list = list(node_list)
+        rects = []
+        for node in node_list:
+            rect = self.create_rect(node)
+            rects.append(rect)
+        pygame.display.update(rects)
+
+    def clear_node(self, node: tuple[int, int]) -> pygame.Rect:
         if self.source == node:
             self.source = None
         if self.target == node:
             self.target = None
         self.walls.discard(node)
-        self.draw_node(self.background_color, node)
+        rect = self.draw_node(node, self.background_color)
+        return rect
 
     def clear_pos(self, pos: tuple[int, int]):
         node = self.pos_to_index(pos)
-        self.clear_node(node)
+        pygame.display.update(self.clear_node(node))
 
     def clear_board(self):
         self.setup()
@@ -64,25 +72,35 @@ class Graph:
 
     def add_wall(self, pos):
         node = self.pos_to_index(pos)
+
         if self.source == node:
             self.source = None
         if self.target == node:
             self.target = None
+
         self.walls.add(node)
-        self.draw_node(self.foreground_color, node)
+
+        rect = self.draw_node(node, self.foreground_color)
+        pygame.display.update(rect)
 
     def update_target(self, pos: tuple[int, int]):
+        if self.target is not None:
+            pygame.display.update(self.clear_node(self.target))
+
         node = self.pos_to_index(pos)
         self.walls.discard(node)
-        if self.target is not None:
-            self.clear_node(self.target)
+        self.clear_node(node)
+        rect = self.draw_node(node, 0xFF0000)
+        pygame.display.update(rect)
         self.target = node
-        self.draw_node(0xFF0000, node)
 
     def update_source(self, pos: tuple[int, int]):
+        if self.source is not None:
+            pygame.display.update(self.clear_node(self.source))
+
         node = self.pos_to_index(pos)
         self.walls.discard(node)
-        if self.source is not None:
-            self.clear_node(self.source)
+        self.clear_node(node)
+        rect = self.draw_node(node, 0x99FFCC)
+        pygame.display.update(rect)
         self.source = node
-        self.draw_node(0x99FFCC, node)
