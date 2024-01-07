@@ -33,7 +33,7 @@ def main():
     surface = pygame.display.set_mode((1000, 1000))
     graph = Graph(10, -1, FOREGROUND_COLOR, BACKGROUND_COLOR)
     graph.clear_board()
-    result = None
+    result = Result([], set())
     while True:
         if left_mouse_drag():
             graph.add_wall(pygame.mouse.get_pos())
@@ -51,14 +51,14 @@ def main():
 
             if (
                 event.type == pygame.KEYDOWN or any(pygame.mouse.get_pressed())
-            ) and result is not None:
+            ) and result:
                 for node in result.path:
                     graph.clear_node(node)
                 graph.display_nodes(result.path)
                 for node in result.explored:
                     graph.clear_node(node)
                 graph.display_nodes(result.explored)
-                result = None
+                result = Result([], set())
 
             if key_press(event, pygame.K_s):
                 graph.update_source(pygame.mouse.get_pos())
@@ -70,7 +70,7 @@ def main():
                 graph.clear_board()
 
             if key_press(event, pygame.K_RETURN):
-                if graph.source is not None and graph.target is not None:
+                if graph.source and graph.target:
                     result = bfs(graph)
                     for node in result.path:
                         graph.draw_node(node, 0x0000FF)

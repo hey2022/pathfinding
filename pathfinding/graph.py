@@ -18,8 +18,8 @@ class Graph:
         self.setup()
 
     def setup(self):
-        self.source = None
-        self.target = None
+        self.source = ()
+        self.target = ()
         self.walls = set()
 
     def pos_to_index(self, pos: tuple[int, int]) -> tuple[int, int]:
@@ -54,9 +54,9 @@ class Graph:
 
     def clear_node(self, node: tuple[int, int]) -> pygame.Rect:
         if self.source == node:
-            self.source = None
+            self.source = ()
         if self.target == node:
-            self.target = None
+            self.target = ()
         self.walls.discard(node)
         rect = self.draw_node(node, self.background_color)
         return rect
@@ -74,9 +74,9 @@ class Graph:
         node = self.pos_to_index(pos)
 
         if self.source == node:
-            self.source = None
+            self.source = ()
         if self.target == node:
-            self.target = None
+            self.target = ()
 
         self.walls.add(node)
 
@@ -84,23 +84,25 @@ class Graph:
         pygame.display.update(rect)
 
     def update_target(self, pos: tuple[int, int]):
-        if self.target is not None:
+        if self.target:
             pygame.display.update(self.clear_node(self.target))
 
         node = self.pos_to_index(pos)
         self.walls.discard(node)
         self.clear_node(node)
-        rect = self.draw_node(node, 0xFF0000)
-        pygame.display.update(rect)
         self.target = node
 
+        rect = self.draw_node(node, 0xFF0000)
+        pygame.display.update(rect)
+
     def update_source(self, pos: tuple[int, int]):
-        if self.source is not None:
+        if self.source:
             pygame.display.update(self.clear_node(self.source))
 
         node = self.pos_to_index(pos)
         self.walls.discard(node)
         self.clear_node(node)
+        self.source = node
+
         rect = self.draw_node(node, 0x99FFCC)
         pygame.display.update(rect)
-        self.source = node
