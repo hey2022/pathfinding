@@ -1,5 +1,6 @@
 import pygame
 import sys
+
 from pathfinding.graph import *
 from pathfinding.algorithm import *
 
@@ -32,6 +33,7 @@ def main():
     surface = pygame.display.set_mode((1000, 1000))
     graph = Graph(10, -1, FOREGROUND_COLOR, BACKGROUND_COLOR)
     graph.clear_board()
+    result = None
     while True:
         if left_mouse_drag():
             graph.add_wall(pygame.mouse.get_pos())
@@ -47,6 +49,17 @@ def main():
             ):
                 quit()
 
+            if (
+                event.type == pygame.KEYDOWN or any(pygame.mouse.get_pressed())
+            ) and result is not None:
+                for node in result.path:
+                    graph.clear_node(node)
+                graph.display_nodes(result.path)
+                for node in result.explored:
+                    graph.clear_node(node)
+                graph.display_nodes(result.explored)
+                result = None
+
             if key_press(event, pygame.K_s):
                 graph.update_source(pygame.mouse.get_pos())
 
@@ -58,9 +71,10 @@ def main():
 
             if key_press(event, pygame.K_RETURN):
                 if graph.source is not None and graph.target is not None:
-                    path = bfs(graph)
-                    for node in path:
+                    result = bfs(graph)
+                    for node in result.path:
                         graph.draw_node(node, 0x0000FF)
+                    graph.display_nodes(result.path)
             pygame.event.get()
 
 
