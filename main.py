@@ -56,7 +56,8 @@ def main():
                     graph.clear_node(node)
                 graph.display_nodes(result.path)
                 for node in result.explored:
-                    graph.clear_node(node)
+                    if node != graph.source:
+                        graph.clear_node(node)
                 graph.display_nodes(result.explored)
                 result = Result([], set())
 
@@ -71,7 +72,7 @@ def main():
 
             if key_press(event, pygame.K_RETURN):
                 if graph.source and graph.target:
-                    result = bfs(graph)
+                    result = a_star(graph)
                     for node in result.path:
                         graph.draw_node(node, 0x0000FF)
                     graph.display_nodes(result.path)
