@@ -109,15 +109,18 @@ def dfs(graph: Graph) -> Result:
     explored.add(graph.source)
     while queue:
         node = queue.pop()
+
         if node == graph.target:
             return Result(reconstruct_path(came_from[node], came_from), explored)
         if node != graph.source and node not in explored:
             graph.draw_node(node, 0x565656)
-            graph.display_nodes([node])
+            graph.display_nodes(list(node))
+
+        explored.add(node)
         neighbours = get_neighbours(node)
+
         for neighbour in neighbours:
             if valid_node(graph, neighbour) and neighbour not in explored:
                 came_from[neighbour] = node
                 queue.append(neighbour)
-        explored.add(node)
     return Result([], explored)
