@@ -2,7 +2,6 @@ from pathfinding.graph import *
 from collections import deque
 import math
 import heapq
-import math
 
 DIRECTIONS = [
     (0, -1),
