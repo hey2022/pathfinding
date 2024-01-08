@@ -5,14 +5,12 @@ class Graph:
     def __init__(
         self,
         block_size: int,
-        grid_thickness: int,
         foreground_color: int,
         background_color: int,
     ):
         self.block_size = block_size
         self.surface = pygame.display.get_surface()
         self.rows, self.columns = self.pos_to_index(self.surface.get_size())
-        self.grid_thickness = grid_thickness
         self.foreground_color = foreground_color
         self.background_color = background_color
         self.setup()

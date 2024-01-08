@@ -31,7 +31,7 @@ def right_mouse_drag() -> bool:
 def main() -> None:
     clock = pygame.time.Clock()
     surface = pygame.display.set_mode((1000, 1000))
-    graph = Graph(10, -1, FOREGROUND_COLOR, BACKGROUND_COLOR)
+    graph = Graph(10, FOREGROUND_COLOR, BACKGROUND_COLOR)
     graph.clear_board()
     result = Result([], set())
 
