@@ -34,6 +34,6 @@ This program will allow users to interactively visualise many different pathfind
 - `s` to set the `source node`
 - `t` to set the `target node`
 - `c` to clear the board
-- `tab` to cycle which pathfinding algorithm to use (WIP)
+- `tab` to cycle which pathfinding algorithm to use
 - `enter` to run the pathfinding algorithm
 
