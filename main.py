@@ -34,6 +34,8 @@ def main():
     graph = Graph(10, -1, FOREGROUND_COLOR, BACKGROUND_COLOR)
     graph.clear_board()
     result = Result([], set())
+    algorithms = [a_star, bfs, dfs]
+    current_algorithm = 0
     while True:
         if left_mouse_drag():
             graph.add_wall(pygame.mouse.get_pos())
@@ -70,9 +72,13 @@ def main():
             if key_press(event, pygame.K_c):
                 graph.clear_board()
 
+            if key_press(event, pygame.K_TAB):
+                current_algorithm += 1
+                current_algorithm %= len(algorithms)
+
             if key_press(event, pygame.K_RETURN):
                 if graph.source and graph.target:
-                    result = a_star(graph)
+                    result = algorithms[current_algorithm](graph)
                     for node in result.path:
                         graph.draw_node(node, 0x0000FF)
                     graph.display_nodes(result.path)
