@@ -17,7 +17,7 @@ class Graph:
         self.background_color = background_color
         self.setup()
 
-    def setup(self):
+    def setup(self) -> None:
         self.source = ()
         self.target = ()
         self.walls = set()
@@ -61,16 +61,16 @@ class Graph:
         rect = self.draw_node(node, self.background_color)
         return rect
 
-    def clear_pos(self, pos: tuple[int, int]):
+    def clear_pos(self, pos: tuple[int, int]) -> None:
         node = self.pos_to_index(pos)
         pygame.display.update(self.clear_node(node))
 
-    def clear_board(self):
+    def clear_board(self) -> None:
         self.setup()
         self.surface.fill(self.background_color)
         pygame.display.update()
 
-    def add_wall(self, pos):
+    def add_wall(self, pos) -> None:
         node = self.pos_to_index(pos)
 
         if self.source == node:
@@ -83,7 +83,7 @@ class Graph:
         rect = self.draw_node(node, self.foreground_color)
         pygame.display.update(rect)
 
-    def update_target(self, pos: tuple[int, int]):
+    def update_target(self, pos: tuple[int, int]) -> None:
         if self.target:
             pygame.display.update(self.clear_node(self.target))
 
@@ -95,7 +95,7 @@ class Graph:
         rect = self.draw_node(node, 0xFF0000)
         pygame.display.update(rect)
 
-    def update_source(self, pos: tuple[int, int]):
+    def update_source(self, pos: tuple[int, int]) -> None:
         if self.source:
             pygame.display.update(self.clear_node(self.source))
 

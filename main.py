@@ -5,7 +5,7 @@ from pathfinding.graph import *
 from pathfinding.algorithm import *
 
 
-def quit():
+def quit() -> None:
     pygame.quit()
     sys.exit()
 
@@ -28,7 +28,7 @@ def right_mouse_drag() -> bool:
     return pygame.mouse.get_pressed()[2]
 
 
-def main():
+def main() -> None:
     clock = pygame.time.Clock()
     surface = pygame.display.set_mode((1000, 1000))
     graph = Graph(10, -1, FOREGROUND_COLOR, BACKGROUND_COLOR)
