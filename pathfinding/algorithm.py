@@ -113,8 +113,7 @@ def dfs(graph: Graph) -> Result:
         if node == graph.target:
             return Result(reconstruct_path(came_from[node], came_from), explored)
         if node != graph.source and node not in explored:
-            graph.draw_node(node, 0x565656)
-            graph.display_nodes(list(node))
+            pygame.display.update(graph.draw_node(node, 0x565656))
 
         explored.add(node)
         neighbours = get_neighbours(node)
