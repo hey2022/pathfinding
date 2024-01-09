@@ -58,14 +58,15 @@ def a_star(graph: Graph) -> Result:
     )
     while priority_queue:
         node = heapq.heappop(priority_queue)[1]
+        if node == graph.target:
+            return Result(reconstruct_path(came_from[node], came_from), came_from.keys())
+        if node != graph.source:
+            pygame.display.update(graph.draw_node(node, 0x565656))
         neighbours = get_neighbours(node)
         for neighbour in neighbours:
             if valid_node(graph, neighbour):
-                if neighbour == graph.target:
-                    return Result(reconstruct_path(node, came_from), came_from.keys())
                 new_cost = cost[node] + 1
                 if new_cost < cost.get(neighbour, math.inf):
-                    graph.draw_node(neighbour, 0x565656)
                     came_from[neighbour] = node
                     cost[neighbour] = new_cost
                     if (
@@ -76,7 +77,6 @@ def a_star(graph: Graph) -> Result:
                             priority_queue,
                             (new_cost + heuristic(neighbour, graph.target), neighbour),
                         )
-        graph.display_nodes(neighbours)
     return Result([], came_from.keys())
 
 
