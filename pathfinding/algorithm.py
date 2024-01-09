@@ -127,17 +127,19 @@ def dfs(graph: Graph) -> Result:
     return Result([], explored)
 
 
-def path_route(graph: Graph, gap: int, node: tuple[int, int], to: tuple[int, int]) -> pygame.Rect:
+def path_route(
+    graph: Graph, gap: int, node: tuple[int, int], to: tuple[int, int]
+) -> pygame.Rect:
     (x, y) = graph.index_to_pos(node)
     (dy, dx) = (node[0] - to[0], node[1] - to[1])
-    match(dx):
+    match (dx):
         case 1:
             route_x = x
         case 0:
             route_x = x + gap
         case -1:
             route_x = x + graph.block_size - gap
-    match(dy):
+    match (dy):
         case 1:
             route_y = y
         case 0:
@@ -145,12 +147,19 @@ def path_route(graph: Graph, gap: int, node: tuple[int, int], to: tuple[int, int
         case -1:
             route_y = y + graph.block_size - gap
     if dx == 0:
-        return pygame.Rect(route_x, route_y, graph.block_size - gap*2, gap)
+        return pygame.Rect(route_x, route_y, graph.block_size - gap * 2, gap)
     else:
-        return pygame.Rect(route_x, route_y, gap, graph.block_size - gap*2)
+        return pygame.Rect(route_x, route_y, gap, graph.block_size - gap * 2)
 
 
-def draw_path(graph: Graph, gap: int, color: int, pre: tuple[int, int], node: tuple[int, int], next: tuple[int, int]):
+def draw_path(
+    graph: Graph,
+    gap: int,
+    color: int,
+    pre: tuple[int, int],
+    node: tuple[int, int],
+    next: tuple[int, int],
+):
     (x, y) = graph.index_to_pos(node)
     width = graph.block_size - gap * 2
     center = pygame.Rect(x + gap, y + gap, width, width)
