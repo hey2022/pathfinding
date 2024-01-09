@@ -60,7 +60,7 @@ def main() -> None:
                     graph.clear_node(node)
                 graph.display_nodes(result.path)
                 for node in result.explored:
-                    if node != graph.source:
+                    if node != graph.source and node != graph.target:
                         graph.clear_node(node)
                 graph.display_nodes(result.explored)
                 result = Result([], set())
