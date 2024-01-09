@@ -89,7 +89,7 @@ def main() -> None:
                     path.insert(0, graph.source)
                     path.append(graph.target)
                     for i in range(1, len(path)-1):
-                        graph.draw_path(2, PATH_COLOR, path[i-1], path[i], path[i+1])
+                        draw_path(graph, PATH_GAP, PATH_COLOR, path[i-1], path[i], path[i+1])
                     graph.display_nodes(path)
             pygame.event.get()
 
@@ -101,6 +101,7 @@ if __name__ == "__main__":
     FOREGROUND_COLOR = 0xC0CAF5
     BACKGROUND_COLOR = 0x1A1B26
     PATH_COLOR = 0x7AA2F7
+    PATH_GAP = 2
     FONT = pygame.font.Font(None, 50)
     sys.setrecursionlimit(1000000)
     main()
