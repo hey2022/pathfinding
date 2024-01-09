@@ -83,7 +83,7 @@ def main() -> None:
                 if graph.source and graph.target:
                     result = algorithms[current_algorithm](graph)
                     for node in result.path:
-                        graph.draw_node(node, 0x0000FF)
+                        graph.draw_node(node, PATH_COLOR)
                     graph.display_nodes(result.path)
             pygame.event.get()
 
@@ -94,6 +94,7 @@ if __name__ == "__main__":
 
     FOREGROUND_COLOR = 0xC0CAF5
     BACKGROUND_COLOR = 0x1A1B26
+    PATH_COLOR = 0x7AA2F7
     FONT = pygame.font.Font(None, 50)
     sys.setrecursionlimit(1000000)
     main()
