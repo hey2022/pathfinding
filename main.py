@@ -28,6 +28,9 @@ def right_mouse_drag() -> bool:
     return pygame.mouse.get_pressed()[2]
 
 
+
+
+
 def main() -> None:
     clock = pygame.time.Clock()
     surface = pygame.display.set_mode((1000, 1000))
@@ -82,9 +85,12 @@ def main() -> None:
             if key_press(event, pygame.K_RETURN):
                 if graph.source and graph.target:
                     result = algorithms[current_algorithm](graph)
-                    for node in result.path:
-                        graph.draw_node(node, PATH_COLOR)
-                    graph.display_nodes(result.path)
+                    path = result.path[:]
+                    path.insert(0, graph.source)
+                    path.append(graph.target)
+                    for i in range(1, len(path)-1):
+                        graph.draw_path(2, PATH_COLOR, path[i-1], path[i], path[i+1])
+                    graph.display_nodes(path)
             pygame.event.get()
 
 
