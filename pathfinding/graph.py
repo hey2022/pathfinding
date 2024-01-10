@@ -28,6 +28,14 @@ class Graph:
         (y, x) = map(lambda x: x * self.block_size, index)
         return (x, y)
 
+    def is_empty_node(self, node: tuple[int, int]) -> bool:
+        (row, column) = node
+        if row < 0 or row >= self.rows or column < 0 or column >= self.columns:
+            return False
+        if node in self.walls or node == self.source or node == self.target:
+            return False
+        return True
+
     def create_rect(self, index: tuple[int, int]) -> pygame.Rect:
         (x, y) = self.index_to_pos(index)
         return pygame.Rect(

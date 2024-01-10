@@ -20,22 +20,16 @@ class Result:
         self.explored = explored
 
 
-def get_neighbours(node: tuple[int, int]) -> list[tuple[int, int]]:
+def get_neighbours(graph: Graph, node: tuple[int, int]) -> list[tuple[int, int]]:
     next_nodes = [
         (node[0] + direction[0], node[1] + direction[1]) for direction in DIRECTIONS
     ]
-    return next_nodes
-
-
-def valid_node(
-    graph: Graph, node: tuple[int, int], explored: set[tuple[int, int]]
-) -> bool:
-    (row, column) = node
-    if row < 0 or row >= graph.rows or column < 0 or column >= graph.columns:
-        return False
-    if node in graph.walls or node in explored:
-        return False
-    return True
+    valid_nodes = list(
+        filter(
+            lambda node: graph.is_empty_node(node) or node == graph.target, next_nodes
+        )
+    )
+    return valid_nodes
 
 
 def reconstruct_path(
@@ -45,7 +39,7 @@ def reconstruct_path(
     while node in came_from:
         node = came_from[node]
         total_path.insert(0, node)
-    return total_path[1::]
+    return total_path
 
 
 def manhattan_distance(node: tuple[int, int], target: tuple[int, int]) -> int:
@@ -65,79 +59,81 @@ def a_star_euclidian_distance(graph: Graph) -> Result:
 
 
 def a_star(graph: Graph, heuristic: Callable) -> Result:
-    priority_queue = []
+    explored = set()
     came_from = {}
     cost = {graph.source: 0}
-    explored = set()
-    explored.add(graph.source)
+
+    priority_queue = []
     heapq.heappush(
         priority_queue, (heuristic(graph.source, graph.target), graph.source)
     )
+
     while priority_queue:
         node = heapq.heappop(priority_queue)[1]
+        explored.add(node)
+
         if node == graph.target:
-            return Result(reconstruct_path(came_from[node], came_from), explored)
-        if valid_node(graph, node, explored):
-            explored.add(node)
+            return Result(reconstruct_path(node, came_from), explored)
+        if graph.is_empty_node(node):
             pygame.display.update(graph.draw_node(node, 0x565656))
-        neighbours = get_neighbours(node)
-        for neighbour in neighbours:
-            if valid_node(graph, neighbour, explored):
-                new_cost = cost[node] + 1
-                if new_cost < cost.get(neighbour, math.inf):
-                    came_from[neighbour] = node
-                    cost[neighbour] = new_cost
-                    if (
-                        new_cost + heuristic(neighbour, graph.target),
-                        neighbour,
-                    ) not in priority_queue:
-                        heapq.heappush(
-                            priority_queue,
-                            (new_cost + heuristic(neighbour, graph.target), neighbour),
-                        )
-    return Result([], came_from.keys())
+
+        for neighbour in get_neighbours(graph, node):
+            new_cost = cost[node] + 1
+            if new_cost < cost.get(neighbour, math.inf):
+                came_from[neighbour] = node
+                cost[neighbour] = new_cost
+                if (
+                    new_cost + heuristic(neighbour, graph.target),
+                    neighbour,
+                ) not in priority_queue:
+                    heapq.heappush(
+                        priority_queue,
+                        (new_cost + heuristic(neighbour, graph.target), neighbour),
+                    )
+    return Result([], explored)
 
 
 def bfs(graph: Graph) -> Result:
-    queue = deque()
     explored = set()
     came_from = {}
+
+    queue = deque()
     queue.append(graph.source)
-    explored.add(graph.source)
+
     while queue:
         node = queue.popleft()
-        neighbours = get_neighbours(node)
-        for neighbour in neighbours:
-            if valid_node(graph, neighbour, explored):
-                if neighbour == graph.target:
-                    return Result(reconstruct_path(node, came_from), explored)
-                graph.draw_node(neighbour, 0x565656)
+
+        if node == graph.target:
+            return Result(reconstruct_path(node, came_from), explored)
+        if graph.is_empty_node(node):
+            pygame.display.update(graph.draw_node(node, 0x565656))
+
+        for neighbour in get_neighbours(graph, node):
+            if neighbour not in explored:
                 explored.add(neighbour)
                 came_from[neighbour] = node
                 queue.append(neighbour)
-        graph.display_nodes(neighbours)
     return Result([], explored)
 
 
 def dfs(graph: Graph) -> Result:
-    queue = deque()
     explored = set()
     came_from = {}
+
+    queue = deque()
     queue.append(graph.source)
-    explored.add(graph.source)
+
     while queue:
         node = queue.pop()
+        explored.add(node)
 
         if node == graph.target:
-            return Result(reconstruct_path(came_from[node], came_from), explored)
-        if valid_node(graph, node, explored):
+            return Result(reconstruct_path(node, came_from), explored)
+        if graph.is_empty_node(node):
             pygame.display.update(graph.draw_node(node, 0x565656))
 
-        explored.add(node)
-        neighbours = get_neighbours(node)
-
-        for neighbour in neighbours:
-            if valid_node(graph, neighbour, explored):
+        for neighbour in get_neighbours(graph, node):
+            if neighbour not in explored:
                 came_from[neighbour] = node
                 queue.append(neighbour)
     return Result([], explored)

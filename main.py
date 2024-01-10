@@ -57,9 +57,10 @@ def main() -> None:
                 event.type == pygame.KEYDOWN or any(pygame.mouse.get_pressed())
             ) and result:
                 for node in result.path:
-                    graph.clear_node(node)
+                    if graph.is_empty_node(node):
+                        graph.clear_node(node)
                 for node in result.explored:
-                    if node != graph.source and node != graph.target:
+                    if graph.is_empty_node(node):
                         graph.clear_node(node)
                 graph.display_nodes(result.path)
                 graph.display_nodes(result.explored)
@@ -82,19 +83,16 @@ def main() -> None:
             if key_press(event, pygame.K_RETURN):
                 if graph.source and graph.target:
                     result = algorithms[current_algorithm](graph)
-                    path = result.path[:]
-                    path.insert(0, graph.source)
-                    path.append(graph.target)
-                    for i in range(1, len(path) - 1):
+                    for i in range(1, len(result.path) - 1):
                         draw_path(
                             graph,
                             PATH_GAP,
                             PATH_COLOR,
-                            path[i - 1],
-                            path[i],
-                            path[i + 1],
+                            result.path[i - 1],
+                            result.path[i],
+                            result.path[i + 1],
                         )
-                    graph.display_nodes(path)
+                    graph.display_nodes(result.path)
             pygame.event.get()
 
 
