@@ -90,10 +90,7 @@ def a_star(graph: Graph, heuristic: Callable) -> Result:
                     ) not in priority_queue:
                         heapq.heappush(
                             priority_queue,
-                            (
-                                new_cost + heuristic(neighbour, graph.target),
-                                neighbour,
-                            ),
+                            (new_cost + heuristic(neighbour, graph.target), neighbour),
                         )
     return Result([], came_from.keys())
 
