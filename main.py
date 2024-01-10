@@ -24,7 +24,6 @@ def right_mouse_drag() -> bool:
 
 def main() -> None:
     clock = pygame.time.Clock()
-    surface = pygame.display.set_mode((1000, 1000))
     graph = Graph(10, FOREGROUND_COLOR, BACKGROUND_COLOR)
     graph.clear_board()
     result = Result([], set())
@@ -92,6 +91,8 @@ def main() -> None:
 
 if __name__ == "__main__":
     pygame.init()
+    pygame.display.set_mode((1000, 1000))
+
     FOREGROUND_COLOR = 0xC0CAF5
     BACKGROUND_COLOR = 0x1A1B26
     PATH_COLOR = 0x7AA2F7
