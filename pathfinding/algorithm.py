@@ -11,6 +11,8 @@ DIRECTIONS = [
     (-1, 0),
 ]
 
+EXPLORED_COLOR = 0x565656
+
 
 class Result:
     def __init__(
@@ -75,7 +77,7 @@ def a_star(graph: Graph, heuristic: Callable) -> Result:
         if node == graph.target:
             return Result(reconstruct_path(node, came_from), explored)
         if graph.is_empty_node(node):
-            pygame.display.update(graph.draw_node(node, 0x565656))
+            pygame.display.update(graph.draw_node(node, EXPLORED_COLOR))
 
         for neighbour in get_neighbours(graph, node):
             new_cost = cost[node] + 1
@@ -106,7 +108,7 @@ def bfs(graph: Graph) -> Result:
         if node == graph.target:
             return Result(reconstruct_path(node, came_from), explored)
         if graph.is_empty_node(node):
-            pygame.display.update(graph.draw_node(node, 0x565656))
+            pygame.display.update(graph.draw_node(node, EXPLORED_COLOR))
 
         for neighbour in get_neighbours(graph, node):
             if neighbour not in explored:
@@ -130,7 +132,7 @@ def dfs(graph: Graph) -> Result:
         if node == graph.target:
             return Result(reconstruct_path(node, came_from), explored)
         if graph.is_empty_node(node):
-            pygame.display.update(graph.draw_node(node, 0x565656))
+            pygame.display.update(graph.draw_node(node, EXPLORED_COLOR))
 
         for neighbour in get_neighbours(graph, node):
             if neighbour not in explored:
