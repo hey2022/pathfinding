@@ -1,3 +1,4 @@
+from typing import Callable
 from pathfinding.graph import *
 from collections import deque
 import math
@@ -45,11 +46,23 @@ def reconstruct_path(
     return total_path[1::]
 
 
-def heuristic(node: tuple[int, int], target: tuple[int, int]) -> int:
+def manhattan_distance(node: tuple[int, int], target: tuple[int, int]) -> int:
     return abs(target[0] - node[0]) + abs(target[1] - node[1])
 
 
-def a_star(graph: Graph) -> Result:
+def euclidian_distance(node: tuple[int, int], target: tuple[int, int]) -> int:
+    return ((target[0] - node[0]) ** 2 + (target[1] - node[1]) ** 2) ** 0.5
+
+
+def a_star_manhattan_distance(graph: Graph) -> Result:
+    return a_star(graph, manhattan_distance)
+
+
+def a_star_euclidian_distance(graph: Graph) -> Result:
+    return a_star(graph, euclidian_distance)
+
+
+def a_star(graph: Graph, heuristic: Callable) -> Result:
     priority_queue = []
     came_from = {}
     cost = {graph.source: 0}
@@ -77,7 +90,10 @@ def a_star(graph: Graph) -> Result:
                     ) not in priority_queue:
                         heapq.heappush(
                             priority_queue,
-                            (new_cost + heuristic(neighbour, graph.target), neighbour),
+                            (
+                                new_cost + heuristic(neighbour, graph.target),
+                                neighbour,
+                            ),
                         )
     return Result([], came_from.keys())
 

@@ -35,7 +35,7 @@ def main() -> None:
     graph.clear_board()
     result = Result([], set())
 
-    algorithms = [a_star, bfs, dfs]
+    algorithms = [a_star_manhattan_distance, a_star_euclidian_distance, bfs, dfs]
     current_algorithm = 0
     print(algorithms[current_algorithm].__name__)
     while True:
