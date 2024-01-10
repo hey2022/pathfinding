@@ -27,11 +27,13 @@ def get_neighbours(node: tuple[int, int]) -> list[tuple[int, int]]:
     return next_nodes
 
 
-def valid_node(graph: Graph, node: tuple[int, int]) -> bool:
+def valid_node(
+    graph: Graph, node: tuple[int, int], explored: set[tuple[int, int]]
+) -> bool:
     (row, column) = node
     if row < 0 or row >= graph.rows or column < 0 or column >= graph.columns:
         return False
-    if node in graph.walls:
+    if node in graph.walls or node in explored:
         return False
     return True
 
@@ -67,6 +69,7 @@ def a_star(graph: Graph, heuristic: Callable) -> Result:
     came_from = {}
     cost = {graph.source: 0}
     explored = set()
+    explored.add(graph.source)
     heapq.heappush(
         priority_queue, (heuristic(graph.source, graph.target), graph.source)
     )
@@ -74,12 +77,12 @@ def a_star(graph: Graph, heuristic: Callable) -> Result:
         node = heapq.heappop(priority_queue)[1]
         if node == graph.target:
             return Result(reconstruct_path(came_from[node], came_from), explored)
-        if node != graph.source and node not in explored:
+        if valid_node(graph, node, explored):
             explored.add(node)
             pygame.display.update(graph.draw_node(node, 0x565656))
         neighbours = get_neighbours(node)
         for neighbour in neighbours:
-            if valid_node(graph, neighbour):
+            if valid_node(graph, neighbour, explored):
                 new_cost = cost[node] + 1
                 if new_cost < cost.get(neighbour, math.inf):
                     came_from[neighbour] = node
@@ -105,7 +108,7 @@ def bfs(graph: Graph) -> Result:
         node = queue.popleft()
         neighbours = get_neighbours(node)
         for neighbour in neighbours:
-            if valid_node(graph, neighbour) and neighbour not in explored:
+            if valid_node(graph, neighbour, explored):
                 if neighbour == graph.target:
                     return Result(reconstruct_path(node, came_from), explored)
                 graph.draw_node(neighbour, 0x565656)
@@ -127,14 +130,14 @@ def dfs(graph: Graph) -> Result:
 
         if node == graph.target:
             return Result(reconstruct_path(came_from[node], came_from), explored)
-        if node != graph.source and node not in explored:
+        if valid_node(graph, node, explored):
             pygame.display.update(graph.draw_node(node, 0x565656))
 
         explored.add(node)
         neighbours = get_neighbours(node)
 
         for neighbour in neighbours:
-            if valid_node(graph, neighbour) and neighbour not in explored:
+            if valid_node(graph, neighbour, explored):
                 came_from[neighbour] = node
                 queue.append(neighbour)
     return Result([], explored)
