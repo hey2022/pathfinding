@@ -24,7 +24,6 @@ def right_mouse_drag() -> bool:
 
 def main() -> None:
     graph = Graph(10, FOREGROUND_COLOR, BACKGROUND_COLOR)
-    graph.clear_board()
     result = Result([], set())
 
     algorithms = [a_star_manhattan_distance, a_star_euclidian_distance, bfs, dfs]
@@ -65,7 +64,7 @@ def main() -> None:
                 graph.update_target(pygame.mouse.get_pos())
 
             if key_press(event, pygame.K_c):
-                graph.clear_board()
+                graph.setup_board()
 
             if key_press(event, pygame.K_TAB):
                 current_algorithm += 1

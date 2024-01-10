@@ -9,16 +9,19 @@ class Graph:
         background_color: int,
     ):
         self.block_size = block_size
-        self.surface = pygame.display.get_surface()
-        self.rows, self.columns = self.pos_to_index(self.surface.get_size())
         self.foreground_color = foreground_color
         self.background_color = background_color
-        self.setup()
 
-    def setup(self) -> None:
+        self.surface = pygame.display.get_surface()
+        self.rows, self.columns = self.pos_to_index(self.surface.get_size())
+        self.setup_board()
+
+    def setup_board(self) -> None:
         self.source = ()
         self.target = ()
         self.walls = set()
+        self.surface.fill(self.background_color)
+        pygame.display.update()
 
     def pos_to_index(self, pos: tuple[int, int]) -> tuple[int, int]:
         (column, row) = map(lambda x: x // self.block_size, pos)
@@ -70,11 +73,6 @@ class Graph:
     def clear_pos(self, pos: tuple[int, int]) -> None:
         node = self.pos_to_index(pos)
         pygame.display.update(self.clear_node(node))
-
-    def clear_board(self) -> None:
-        self.setup()
-        self.surface.fill(self.background_color)
-        pygame.display.update()
 
     def add_wall(self, pos) -> None:
         node = self.pos_to_index(pos)
