@@ -58,10 +58,10 @@ def main() -> None:
             ) and result:
                 for node in result.path:
                     graph.clear_node(node)
-                graph.display_nodes(result.path)
                 for node in result.explored:
                     if node != graph.source and node != graph.target:
                         graph.clear_node(node)
+                graph.display_nodes(result.path)
                 graph.display_nodes(result.explored)
                 result = Result([], set())
 
