@@ -96,5 +96,4 @@ if __name__ == "__main__":
     BACKGROUND_COLOR = 0x1A1B26
     PATH_COLOR = 0x7AA2F7
     PATH_GAP = 2
-    sys.setrecursionlimit(1000000)
     main()
