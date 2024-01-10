@@ -14,12 +14,6 @@ def key_press(event: pygame.event.Event, key: int) -> bool:
     return event.type == pygame.KEYDOWN and event.key == key
 
 
-def display_message(surface: pygame.Surface, message: str, x: int, y: int):
-    text = FONT.render(message, True, 0xFFFFFFFF)
-    rect = surface.blit(text, (x, y))
-    pygame.display.update(rect)
-
-
 def left_mouse_drag() -> bool:
     return pygame.mouse.get_pressed()[0]
 
@@ -98,12 +92,9 @@ def main() -> None:
 
 if __name__ == "__main__":
     pygame.init()
-    pygame.font.init()
-
     FOREGROUND_COLOR = 0xC0CAF5
     BACKGROUND_COLOR = 0x1A1B26
     PATH_COLOR = 0x7AA2F7
     PATH_GAP = 2
-    FONT = pygame.font.Font(None, 50)
     sys.setrecursionlimit(1000000)
     main()
