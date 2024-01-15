@@ -24,7 +24,7 @@ def right_mouse_drag() -> bool:
 
 def main() -> None:
     graph = Graph(10, FOREGROUND_COLOR, BACKGROUND_COLOR)
-    result = Result([], set())
+    result = Result()
 
     algorithms = [a_star_manhattan_distance, a_star_euclidian_distance, bfs, dfs]
     current_algorithm = 0
@@ -55,7 +55,7 @@ def main() -> None:
                         graph.clear_node(node)
                 graph.display_nodes(result.path)
                 graph.display_nodes(result.explored)
-                result = Result([], set())
+                result = Result()
 
             if key_press(event, pygame.K_s):
                 graph.update_source(pygame.mouse.get_pos())
