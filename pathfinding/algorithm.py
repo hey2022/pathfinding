@@ -37,11 +37,11 @@ def get_neighbours(graph: Graph, node: tuple[int, int]) -> list[tuple[int, int]]
 def reconstruct_path(
     node: tuple[int, int], came_from: dict[tuple[int, int], tuple[int, int]]
 ) -> list[tuple[int, int]]:
-    total_path = [node]
+    path = [node]
     while node in came_from:
         node = came_from[node]
-        total_path.insert(0, node)
-    return total_path
+        path.insert(0, node)
+    return path
 
 
 def manhattan_distance(node: tuple[int, int], target: tuple[int, int]) -> int:
