@@ -1,8 +1,15 @@
 import pygame
 import sys
 
-from pathfinding.graph import *
-from pathfinding.algorithm import *
+from pathfinding.graph import Graph
+from pathfinding.algorithm import (
+    a_star_euclidian_distance,
+    a_star_manhattan_distance,
+    bfs,
+    dfs,
+    Result,
+    draw_path,
+)
 
 
 def quit() -> None:

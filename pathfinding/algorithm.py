@@ -1,5 +1,6 @@
+import pygame
 from typing import Callable
-from pathfinding.graph import *
+from pathfinding.graph import Graph
 from collections import deque
 import math
 import heapq
