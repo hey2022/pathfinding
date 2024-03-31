@@ -81,16 +81,7 @@ def main() -> None:
             if key_press(event, pygame.K_RETURN):
                 if graph.source and graph.target:
                     result = algorithms[current_algorithm](graph)
-                    for i in range(1, len(result.path) - 1):
-                        draw_path(
-                            graph,
-                            PATH_GAP,
-                            PATH_COLOR,
-                            result.path[i - 1],
-                            result.path[i],
-                            result.path[i + 1],
-                        )
-                    graph.display_nodes(result.path)
+                    draw_path(graph, result.path, PATH_COLOR)
             pygame.event.get()
 
 
@@ -101,5 +92,4 @@ if __name__ == "__main__":
     FOREGROUND_COLOR = 0xC0CAF5
     BACKGROUND_COLOR = 0x1A1B26
     PATH_COLOR = 0x7AA2F7
-    PATH_GAP = 2
     main()

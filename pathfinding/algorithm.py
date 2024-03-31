@@ -154,42 +154,53 @@ def dfs(graph: Graph) -> Result:
     return result
 
 
-def path_route(
-    graph: Graph, gap: int, node: tuple[int, int], to: tuple[int, int]
-) -> pygame.Rect:
-    (x, y) = graph.index_to_pos(node)
-    (dy, dx) = (node[0] - to[0], node[1] - to[1])
-    match (dx):
-        case 1:
-            route_x = x
-        case 0:
-            route_x = x + gap
-        case -1:
-            route_x = x + graph.block_size - gap
-    match (dy):
-        case 1:
-            route_y = y
-        case 0:
-            route_y = y + gap
-        case -1:
-            route_y = y + graph.block_size - gap
-    if dx == 0:
-        return pygame.Rect(route_x, route_y, graph.block_size - gap * 2, gap)
-    else:
-        return pygame.Rect(route_x, route_y, gap, graph.block_size - gap * 2)
-
-
 def draw_path(
     graph: Graph,
-    gap: int,
+    path: list[tuple[int, int]],
     color: int,
-    pre: tuple[int, int],
-    node: tuple[int, int],
-    next: tuple[int, int],
 ):
-    (x, y) = graph.index_to_pos(node)
-    width = graph.block_size - gap * 2
-    center = pygame.Rect(x + gap, y + gap, width, width)
-    pygame.draw.rect(graph.surface, color, center)
-    pygame.draw.rect(graph.surface, color, path_route(graph, gap, node, pre))
-    pygame.draw.rect(graph.surface, color, path_route(graph, gap, node, next))
+    gap = graph.block_size // 4
+    for i in range(1, len(path) - 1):
+        (x, y) = graph.index_to_pos(path[i])
+        width = graph.block_size - gap * 2
+        center = pygame.Rect(x + gap, y + gap, width, width)
+        pygame.draw.rect(graph.surface, color, center)
+        pygame.draw.rect(
+            graph.surface, color, draw_path_connection(graph, gap, path[i], path[i - 1])
+        )
+        pygame.draw.rect(
+            graph.surface, color, draw_path_connection(graph, gap, path[i], path[i + 1])
+        )
+    graph.display_nodes(path)
+
+
+def draw_path_connection(
+    graph: Graph,
+    gap: int,
+    current_node: tuple[int, int],
+    adjacent_node: tuple[int, int],
+) -> pygame.Rect:
+    (x, y) = graph.index_to_pos(current_node)
+    (dy, dx) = (adjacent_node[0] - current_node[0], adjacent_node[1] - current_node[1])
+    match (dx, dy):
+        case (1, 0):
+            pos_x = x + graph.block_size - gap
+            pos_y = y + gap
+            width = gap
+            height = graph.block_size - gap * 2
+        case (-1, 0):
+            pos_x = x
+            pos_y = y + gap
+            width = gap
+            height = graph.block_size - gap * 2
+        case (0, 1):
+            pos_x = x + gap
+            pos_y = y + graph.block_size - gap
+            width = graph.block_size - gap * 2
+            height = gap
+        case (0, -1):
+            pos_x = x + gap
+            pos_y = y
+            width = graph.block_size - gap * 2
+            height = gap
+    return pygame.Rect(pos_x, pos_y, width, height)
