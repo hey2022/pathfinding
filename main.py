@@ -32,6 +32,7 @@ def right_mouse_drag() -> bool:
 def main() -> None:
     graph = Graph(10, FOREGROUND_COLOR, BACKGROUND_COLOR)
     result = Result()
+    clock = pygame.time.Clock()
 
     algorithms = [a_star_manhattan_distance, a_star_euclidian_distance, bfs, dfs]
     current_algorithm = 0
@@ -83,12 +84,14 @@ def main() -> None:
                     result = algorithms[current_algorithm](graph)
                     draw_path(graph, result.path, PATH_COLOR)
             pygame.event.get()
+        clock.tick(FPS)
 
 
 if __name__ == "__main__":
     pygame.init()
     pygame.display.set_mode((1000, 1000))
 
+    FPS = 60
     FOREGROUND_COLOR = 0xC0CAF5
     BACKGROUND_COLOR = 0x1A1B26
     PATH_COLOR = 0x7AA2F7
