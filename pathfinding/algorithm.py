@@ -6,10 +6,10 @@ import math
 import heapq
 
 DIRECTIONS = [
-    (0, -1),
     (1, 0),
     (0, 1),
     (-1, 0),
+    (0, -1),
 ]
 
 EXPLORED_COLOR = 0x565656
