@@ -12,21 +12,8 @@ from pathfinding.algorithm import (
 )
 
 
-def quit() -> None:
-    pygame.quit()
-    sys.exit()
-
-
 def key_press(event: pygame.event.Event, key: int) -> bool:
     return event.type == pygame.KEYDOWN and event.key == key
-
-
-def left_mouse_drag() -> bool:
-    return pygame.mouse.get_pressed()[0]
-
-
-def right_mouse_drag() -> bool:
-    return pygame.mouse.get_pressed()[2]
 
 
 def main() -> None:
@@ -38,11 +25,13 @@ def main() -> None:
     current_algorithm = 0
     print(algorithms[current_algorithm].__name__)
     while True:
-        if left_mouse_drag():
+        # left mouse pressed
+        if pygame.mouse.get_pressed()[0]:
             graph.add_wall(pygame.mouse.get_pos())
 
-        if right_mouse_drag():
             graph.clear_pos(pygame.mouse.get_pos())
+        # right mouse pressed
+        if pygame.mouse.get_pressed()[2]:
 
         for event in pygame.event.get():
             if (
@@ -50,8 +39,8 @@ def main() -> None:
                 or event.type == pygame.KEYDOWN
                 and event.key == pygame.K_ESCAPE
             ):
-                quit()
-
+                pygame.quit()
+                sys.exit()
             if (
                 event.type == pygame.KEYDOWN or any(pygame.mouse.get_pressed())
             ) and result:
