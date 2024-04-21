@@ -22,8 +22,8 @@ def main() -> None:
     clock = pygame.time.Clock()
 
     algorithms = [a_star_manhattan_distance, a_star_euclidian_distance, bfs, dfs]
-    current_algorithm = 0
-    print(algorithms[current_algorithm].__name__)
+    current_algorithm_index = 0
+    print(algorithms[current_algorithm_index].__name__)
     while True:
         # left mouse pressed
         if pygame.mouse.get_pressed()[0]:
@@ -64,13 +64,14 @@ def main() -> None:
                 graph.setup_board()
 
             if key_press(event, pygame.K_TAB):
-                current_algorithm += 1
-                current_algorithm %= len(algorithms)
-                print(algorithms[current_algorithm].__name__)
+                current_algorithm_index = (current_algorithm_index + 1) % len(
+                    algorithms
+                )
+                print(algorithms[current_algorithm_index].__name__)
 
             if key_press(event, pygame.K_RETURN):
                 if graph.source and graph.target:
-                    result = algorithms[current_algorithm](graph)
+                    result = algorithms[current_algorithm_index](graph)
                     draw_path(graph, result.path, PATH_COLOR)
             pygame.event.get()
         clock.tick(FPS)
