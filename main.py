@@ -73,6 +73,8 @@ def main() -> None:
                 if graph.source and graph.target:
                     result = algorithms[current_algorithm_index](graph)
                     draw_path(graph, result.path, PATH_COLOR)
+
+            # ignore extra events received while pathfinding algorithm is running
             pygame.event.get()
         clock.tick(FPS)
 
