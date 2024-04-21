@@ -180,11 +180,11 @@ def draw_path_connection(
     adjacent_node: tuple[int, int],
 ) -> pygame.Rect:
     (pixel_x, pixel_y) = graph.node_to_pixel(current_node)
-    (dpixel_x, dpixel_y) = (
+    (dx, dy) = (
         adjacent_node[0] - current_node[0],
         adjacent_node[1] - current_node[1],
     )
-    match (dpixel_x, dpixel_y):
+    match (dx, dy):
         case (1, 0):
             # right edge
             pos_x = pixel_x + graph.node_size - gap
