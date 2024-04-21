@@ -24,15 +24,14 @@ class Result:
 
 
 def get_neighbours(graph: Graph, node: tuple[int, int]) -> list[tuple[int, int]]:
-    next_nodes = [
-        (node[0] + direction[0], node[1] + direction[1]) for direction in DIRECTIONS
+    neighbours = [
+        next_node
+        for direction in DIRECTIONS
+        if (next_node := (node[0] + direction[0], node[1] + direction[1]))
+        and graph.is_empty_node(next_node)
+        or next_node == graph.target
     ]
-    valid_nodes = list(
-        filter(
-            lambda node: graph.is_empty_node(node) or node == graph.target, next_nodes
-        )
-    )
-    return valid_nodes
+    return neighbours
 
 
 def reconstruct_path(
