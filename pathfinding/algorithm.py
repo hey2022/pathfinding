@@ -158,11 +158,11 @@ def draw_path(
     path: list[tuple[int, int]],
     color: int,
 ):
-    gap = graph.block_size // 4
+    gap = graph.node_size // 4
     for i in range(1, len(path) - 1):
-        (x, y) = graph.index_to_pos(path[i])
-        width = graph.block_size - gap * 2
-        center = pygame.Rect(x + gap, y + gap, width, width)
+        (pixel_x, pixel_y) = graph.node_to_pixel(path[i])
+        width = graph.node_size - gap * 2
+        center = pygame.Rect(pixel_x + gap, pixel_y + gap, width, width)
         pygame.draw.rect(graph.surface, color, center)
         pygame.draw.rect(
             graph.surface, color, draw_path_connection(graph, gap, path[i], path[i - 1])
@@ -179,27 +179,34 @@ def draw_path_connection(
     current_node: tuple[int, int],
     adjacent_node: tuple[int, int],
 ) -> pygame.Rect:
-    (x, y) = graph.index_to_pos(current_node)
-    (dy, dx) = (adjacent_node[0] - current_node[0], adjacent_node[1] - current_node[1])
-    match (dx, dy):
+    (pixel_x, pixel_y) = graph.node_to_pixel(current_node)
+    (dpixel_x, dpixel_y) = (
+        adjacent_node[0] - current_node[0],
+        adjacent_node[1] - current_node[1],
+    )
+    match (dpixel_x, dpixel_y):
         case (1, 0):
-            pos_x = x + graph.block_size - gap
-            pos_y = y + gap
+            # right edge
+            pos_x = pixel_x + graph.node_size - gap
+            pos_y = pixel_y + gap
             width = gap
-            height = graph.block_size - gap * 2
-        case (-1, 0):
-            pos_x = x
-            pos_y = y + gap
-            width = gap
-            height = graph.block_size - gap * 2
+            height = graph.node_size - gap * 2
         case (0, 1):
-            pos_x = x + gap
-            pos_y = y + graph.block_size - gap
-            width = graph.block_size - gap * 2
+            # bottom edge
+            pos_x = pixel_x + gap
+            pos_y = pixel_y + graph.node_size - gap
+            width = graph.node_size - gap * 2
             height = gap
+        case (-1, 0):
+            # left edge
+            pos_x = pixel_x
+            pos_y = pixel_y + gap
+            width = gap
+            height = graph.node_size - gap * 2
         case (0, -1):
-            pos_x = x + gap
-            pos_y = y
-            width = graph.block_size - gap * 2
+            # top edge
+            pos_x = pixel_x + gap
+            pos_y = pixel_y
+            width = graph.node_size - gap * 2
             height = gap
     return pygame.Rect(pos_x, pos_y, width, height)

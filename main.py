@@ -29,9 +29,9 @@ def main() -> None:
         if pygame.mouse.get_pressed()[0]:
             graph.add_wall(pygame.mouse.get_pos())
 
-            graph.clear_pos(pygame.mouse.get_pos())
         # right mouse pressed
         if pygame.mouse.get_pressed()[2]:
+            graph.clear_pixel(pygame.mouse.get_pos())
 
         for event in pygame.event.get():
             if (
