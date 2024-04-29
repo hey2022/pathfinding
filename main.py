@@ -21,19 +21,22 @@ def main() -> None:
     result = Result()
     clock = pygame.time.Clock()
 
+    # list of pathfinding algorithms
     algorithms = [a_star_manhattan_distance, a_star_euclidian_distance, bfs, dfs]
     current_algorithm_index = 0
     print(algorithms[current_algorithm_index].__name__)
+
     while True:
-        # left mouse pressed
+        # add wall at mouse position when left mouse pressed
         if pygame.mouse.get_pressed()[0]:
             graph.add_wall(pygame.mouse.get_pos())
 
-        # right mouse pressed
+        # clear wall at mouse position when right mouse pressed
         if pygame.mouse.get_pressed()[2]:
             graph.clear_pixel(pygame.mouse.get_pos())
 
         for event in pygame.event.get():
+            # quit game
             if (
                 event.type == pygame.QUIT
                 or event.type == pygame.KEYDOWN
@@ -41,34 +44,45 @@ def main() -> None:
             ):
                 pygame.quit()
                 sys.exit()
+
+            # clear visualizations after running pathfinding algorithms
             if (
                 event.type == pygame.KEYDOWN or any(pygame.mouse.get_pressed())
             ) and result:
+                # remove path visualizations
                 for node in result.path:
+                    # don't remove source and target node
                     if graph.is_empty_node(node):
                         graph.clear_node(node)
+                # remove visited visualizations
                 for node in result.explored:
                     if graph.is_empty_node(node):
                         graph.clear_node(node)
+                # update display
                 graph.display_nodes(result.path)
                 graph.display_nodes(result.explored)
                 result = Result()
 
+            # update position of source node
             if key_press(event, pygame.K_s):
                 graph.update_source(pygame.mouse.get_pos())
 
+            # update position of target node
             if key_press(event, pygame.K_t):
                 graph.update_target(pygame.mouse.get_pos())
 
+            # clear board
             if key_press(event, pygame.K_c):
                 graph.setup_board()
 
+            # cycle pathfinding algorithm to use
             if key_press(event, pygame.K_TAB):
                 current_algorithm_index = (current_algorithm_index + 1) % len(
                     algorithms
                 )
                 print(algorithms[current_algorithm_index].__name__)
 
+            # run pathfinding algorithm
             if key_press(event, pygame.K_RETURN):
                 if graph.source and graph.target:
                     result = algorithms[current_algorithm_index](graph)
