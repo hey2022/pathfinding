@@ -111,8 +111,11 @@ class Graph:
             pygame.display.update(self.clear_node(self.target))
 
         node = self.pixel_to_node(pixel)
+
+        # remove previous node at new target location
         self.walls.discard(node)
         self.clear_node(node)
+
         self.target = node
 
         rect = self.draw_node(node, 0xFF0000)
@@ -125,8 +128,11 @@ class Graph:
             pygame.display.update(self.clear_node(self.source))
 
         node = self.pixel_to_node(pixel)
+
+        # remove previous node at new source location
         self.walls.discard(node)
         self.clear_node(node)
+
         self.source = node
 
         rect = self.draw_node(node, 0x99FFCC)
