@@ -23,15 +23,15 @@ class Result:
         pass
 
 
-def get_neighbours(graph: Graph, node: tuple[int, int]) -> list[tuple[int, int]]:
-    neighbours = [
+def get_neighbors(graph: Graph, node: tuple[int, int]) -> list[tuple[int, int]]:
+    neighbors = [
         next_node
         for direction in DIRECTIONS
         if (next_node := (node[0] + direction[0], node[1] + direction[1]))
         and graph.is_empty_node(next_node)
         or next_node == graph.target
     ]
-    return neighbours
+    return neighbors
 
 
 def reconstruct_path(
@@ -82,18 +82,18 @@ def a_star(graph: Graph, heuristic: Callable) -> Result:
         if graph.is_empty_node(node):
             pygame.display.update(graph.draw_node(node, EXPLORED_COLOR))
 
-        for neighbour in get_neighbours(graph, node):
+        for neighbor in get_neighbors(graph, node):
             new_cost = cost[node] + 1
-            if new_cost < cost.get(neighbour, math.inf):
-                came_from[neighbour] = node
-                cost[neighbour] = new_cost
+            if new_cost < cost.get(neighbor, math.inf):
+                came_from[neighbor] = node
+                cost[neighbor] = new_cost
                 if (
-                    new_cost + heuristic(neighbour, graph.target),
-                    neighbour,
+                    new_cost + heuristic(neighbor, graph.target),
+                    neighbor,
                 ) not in priority_queue:
                     heapq.heappush(
                         priority_queue,
-                        (new_cost + heuristic(neighbour, graph.target), neighbour),
+                        (new_cost + heuristic(neighbor, graph.target), neighbor),
                     )
     result.explored = explored
     return result
@@ -117,11 +117,11 @@ def bfs(graph: Graph) -> Result:
         if graph.is_empty_node(node):
             pygame.display.update(graph.draw_node(node, EXPLORED_COLOR))
 
-        for neighbour in get_neighbours(graph, node):
-            if neighbour not in explored:
-                explored.add(neighbour)
-                came_from[neighbour] = node
-                queue.append(neighbour)
+        for neighbor in get_neighbors(graph, node):
+            if neighbor not in explored:
+                explored.add(neighbor)
+                came_from[neighbor] = node
+                queue.append(neighbor)
     result.explored = explored
     return result
 
@@ -145,10 +145,10 @@ def dfs(graph: Graph) -> Result:
         if graph.is_empty_node(node):
             pygame.display.update(graph.draw_node(node, EXPLORED_COLOR))
 
-        for neighbour in get_neighbours(graph, node):
-            if neighbour not in explored:
-                came_from[neighbour] = node
-                queue.append(neighbour)
+        for neighbor in get_neighbors(graph, node):
+            if neighbor not in explored:
+                came_from[neighbor] = node
+                queue.append(neighbor)
     result.explored = explored
     return result
 
